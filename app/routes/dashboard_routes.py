@@ -5,9 +5,6 @@ from app.middleware.auth_middleware import require_role
 router = APIRouter()
 
 
-# =========================
-# 🔹 SUMMARY API
-# =========================
 @router.get("/summary")
 async def get_summary(user=Depends(require_role(["admin", "analyst"]))):
     pipeline = [
@@ -38,9 +35,6 @@ async def get_summary(user=Depends(require_role(["admin", "analyst"]))):
     }
 
 
-# =========================
-# 🔹 MONTHLY TRENDS API 🔥
-# =========================
 @router.get("/trends")
 async def monthly_trends(user=Depends(require_role(["admin", "analyst"]))):
     pipeline = [
@@ -79,7 +73,9 @@ async def monthly_trends(user=Depends(require_role(["admin", "analyst"]))):
 
         month_map[month][type_] = total
 
-    # sort by month
-    sorted_data = sorted(month_map.values(), key=lambda x: month_names.index(x["month"]))
+    sorted_data = sorted(
+        month_map.values(),
+        key=lambda x: month_names.index(x["month"])
+    )
 
     return sorted_data
